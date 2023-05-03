@@ -16,6 +16,8 @@ var WeatherData = {
   Humidity: [],
   UVRating: [],
   daypartName: [],
+  NightOrDay: "",
+  currentTime: ""
 };
 const date = new Date();
 
@@ -157,14 +159,19 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
       WeatherData.Humidity = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["relativeHumidity"];
       WeatherData.UVRating = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["uvIndex"];
       WeatherData.daypartName = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["daypartName"];
+      WeatherData.NightOrDay = data3["v3-wx-forecast-hourly-10day"]["dayOrNight"];
+      WeatherData.currentTime = data3["v3-wx-observations-current"]["validTimeLocal"];
 
-      
+
 
       console.log("Maxtemp");
       console.log(WeatherData.maxTemp);
       console.log("WindDirection");
       console.log(WeatherData.WeatherPhrase);
+      console.log("WindPhrase");
+      console.log(WeatherData.WindPhrase);
       setWeatherContainer(WeatherData);
+      setBackgroundfromTime(WeatherData.NightOrDay);
 
     })
     .catch(error => console.log(error));
@@ -192,23 +199,27 @@ function setWeatherContainer(weatherDataInput) {
     weatherDiv.classList.add('weather');
     /*const location = document.createElement('h1');
     location.textContent = data.location[i];*/
+    const TimeDate = document.createElement('p');
+    var formattedDate = formatReadableDate(weatherDataInput.currentTime)
+    TimeDate.textContent = `${formattedDate}`;
     const temperature = document.createElement('p');
-    temperature.textContent = `Temperature: ${weatherDataInput.maxTemp[i]}`;
-    /*const windPhrase = document.createElement('p');
-    windPhrase.textContent = `${data.WindPhrase[i]}`;
+    temperature.textContent = `${weatherDataInput.maxTemp[i]}&deg;F`;
+    const windPhrase = document.createElement('p');
+    windPhrase.textContent = `${weatherDataInput.WindPhrase[i]}`;
     const WeatherPhrase = document.createElement('p');
-    WeatherPhrase.textContent = `Wind Speed: ${data.WeatherPhrase[i]}`;
+    WeatherPhrase.textContent = `Wind Speed: ${weatherDataInput.WeatherPhrase[i]}`;
     const cloudCover = document.createElement('p');
-    cloudCover.textContent = `Cloud Cover: ${data.cloudCover[i]}`;
+    cloudCover.textContent = `Cloud Cover: ${weatherDataInput.CloudCover[i]}%`;
     const humidity = document.createElement('p');
-    humidity.textContent = `Humidity: ${data.humidity[i]}`;*/
+    humidity.textContent = `Humidity: ${weatherDataInput.Humidity[i]}%`;
 
     // Append all the elements to the weather div
     //weatherDiv.appendChild(location);
     weatherDiv.appendChild(temperature);
-    /*weatherDiv.appendChild(windSpeed);
+    weatherDiv.appendChild(TimeDate);
+    weatherDiv.appendChild(windPhrase);
     weatherDiv.appendChild(cloudCover);
-    weatherDiv.appendChild(humidity);*/
+    weatherDiv.appendChild(humidity)
 
     // Append the weather div to the container div
     container.appendChild(weatherDiv);
@@ -216,9 +227,60 @@ function setWeatherContainer(weatherDataInput) {
     // Append the container div to the carousel
     carousel.appendChild(container);
   }
+
+  // Initialize the carousel using jQuery
+$(document).ready(function() {
+  $(".weatherContainer").slick({
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1
+  });
+});
 }
 
 
+/* Add effects for night and day background*/
+
+const body = document.querySelector('body');
+
+function setBackgroundfromTime(NightOrDay){
+  
+  
+    if (NightOrDay == 'D') {
+      
+    } else {
+      body.style.backgroundImage = 'url("Pawl_mountains_material_design_blue_green_material_design_wallp_a49c9e00-67ef-44a5-8680-f1b45f35a933.png")';
+    }
+  
+  
+}
+
+
+function convertUTCDateToLocalDate(date) {
+  var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+  
+  var offset = date.getTimezoneOffset() / 60;
+  var hours = date.getHours();
+  
+  newDate.setHours(hours - offset);
+  
+  return newDate;
+}
+
+function formatReadableDate(utcDate) {
+  var localDate = convertUTCDateToLocalDate(new Date(utcDate));
+  
+  var year = localDate.getFullYear();
+  var month = (localDate.getMonth() + 1).toString().padStart(2, '0');
+  var day = localDate.getDate().toString().padStart(2, '0');
+  var hours = localDate.getHours().toString().padStart(2, '0');
+  var minutes = localDate.getMinutes().toString().padStart(2, '0');
+  var seconds = localDate.getSeconds().toString().padStart(2, '0');
+  
+  return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
 
 /*fetch('https://ipapi.co/json/')
   .then(response => response.json())
