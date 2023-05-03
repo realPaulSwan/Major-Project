@@ -103,7 +103,7 @@ function getLocationQuery(query, data) {
   const options3 = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '8cbd3a1197mshd38b28f38b92abdp1182c2jsn9dc19b670992',
+      'X-RapidAPI-Key': '25ba458d65msh704a5d78d43a769p1b283djsn6b6551de9b93',
       'X-RapidAPI-Host': 'weather338.p.rapidapi.com'
     }
   };
@@ -137,7 +137,7 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
   const options4 = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '8cbd3a1197mshd38b28f38b92abdp1182c2jsn9dc19b670992',
+      'X-RapidAPI-Key': '25ba458d65msh704a5d78d43a769p1b283djsn6b6551de9b93',
       'X-RapidAPI-Host': 'weather338.p.rapidapi.com'
     }
   };
@@ -157,9 +157,9 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
       WeatherData.WeatherPhrase = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["wxPhraseLong"];
       WeatherData.CloudCover = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["cloudCover"];
       WeatherData.Humidity = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["relativeHumidity"];
-      WeatherData.UVRating = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["uvIndex"];
+      WeatherData.UVRating = data3["v3-wx-forecast-hourly-10day"]["uvIndex"];
       WeatherData.daypartName = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["daypartName"];
-      WeatherData.NightOrDay = data3["v3-wx-forecast-hourly-10day"]["dayOrNight"];
+      WeatherData.NightOrDay = data3["v3-wx-observations-current"]["dayOrNight"];
       WeatherData.currentTime = data3["v3-wx-observations-current"]["validTimeLocal"];
 
 
@@ -191,27 +191,31 @@ function getFullDateAsInt(date) {
 const carousel = document.querySelector('.weatherContainer');
 
 function setWeatherContainer(weatherDataInput) {
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 4; i++) {
     //const data = weatherData;
     const container = document.createElement('div');
     container.classList.add('container');
     const weatherDiv = document.createElement('div');
     weatherDiv.classList.add('weather');
-    /*const location = document.createElement('h1');
-    location.textContent = data.location[i];*/
+    
     const TimeDate = document.createElement('p');
-    var formattedDate = formatReadableDate(weatherDataInput.currentTime)
-    TimeDate.textContent = `${formattedDate}`;
+    //var formattedDate = formatReadableDate(weatherDataInput.currentTime)
+    TimeDate.textContent = `${weatherDataInput.currentTime}`;
     const temperature = document.createElement('p');
-    temperature.textContent = `${weatherDataInput.maxTemp[i]}&deg;F`;
+    temperature.textContent = `${weatherDataInput.maxTemp[i]} &degF`;
     const windPhrase = document.createElement('p');
     windPhrase.textContent = `${weatherDataInput.WindPhrase[i]}`;
     const WeatherPhrase = document.createElement('p');
     WeatherPhrase.textContent = `Wind Speed: ${weatherDataInput.WeatherPhrase[i]}`;
+    const UVRating = document.createElement('p');
+    var uvHourlytoDailyNum = i + 10;
+    UVRating.textContent = `${weatherDataInput.UVRating[uvHourlytoDailyNum]}`;
+    //weather image selection
     const cloudCover = document.createElement('p');
     cloudCover.textContent = `Cloud Cover: ${weatherDataInput.CloudCover[i]}%`;
     const humidity = document.createElement('p');
     humidity.textContent = `Humidity: ${weatherDataInput.Humidity[i]}%`;
+    
 
     // Append all the elements to the weather div
     //weatherDiv.appendChild(location);
@@ -249,9 +253,9 @@ function setBackgroundfromTime(NightOrDay){
   
   
     if (NightOrDay == 'D') {
-      
-    } else {
       body.style.backgroundImage = 'url("Pawl_mountains_material_design_blue_green_material_design_wallp_a49c9e00-67ef-44a5-8680-f1b45f35a933.png")';
+    } else {
+      body.style.backgroundImage = 'url("Pawl_night_mountains_material_design_blue_green_material_design_95fb5cca-cd46-4e1a-b789-940562efe2c9.png")';
     }
   
   
@@ -270,68 +274,21 @@ function convertUTCDateToLocalDate(date) {
 }
 
 function formatReadableDate(utcDate) {
-  var localDate = convertUTCDateToLocalDate(new Date(utcDate));
+
+  const dateTime = new Date(utcDate);
+  const options = {
+  weekday: 'long',
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+  timeZoneName: 'short'
+};
+const readableDateTime = dateTime.toLocaleDateString('en-US', options);
+console.log(readableDateTime);
   
-  var year = localDate.getFullYear();
-  var month = (localDate.getMonth() + 1).toString().padStart(2, '0');
-  var day = localDate.getDate().toString().padStart(2, '0');
-  var hours = localDate.getHours().toString().padStart(2, '0');
-  var minutes = localDate.getMinutes().toString().padStart(2, '0');
-  var seconds = localDate.getSeconds().toString().padStart(2, '0');
-  
-  return `${year}-${month}-${day} ${hours}:${minutes}`;
+  //return `${year}-${month}-${day} ${hours}:${minutes}`;
+  return readableDateTime;
 }
-
-/*fetch('https://ipapi.co/json/')
-  .then(response => response.json())
-  .then(data2 => {
-    // Log the location data to the console
-    const location = data2.city;
-    const state = data2.region;
-    latitude = data2.latitude;
-    longatude = data2.longitude;
-    console.log(data2);
-
-    setLocationInfo(location, state)
-
-    const options = {
-      method: 'GET',
-      headers: {
-        'X-RapidAPI-Key': '8cbd3a1197mshd38b28f38b92abdp1182c2jsn9dc19b670992',
-        'X-RapidAPI-Host': 'weatherapi-com.p.rapidapi.com'
-      }
-    };
-    
-    // Retrieve current weather data from WeatherAPI.com
-    fetch('https://weatherapi-com.p.rapidapi.com/current.json?q=%20'+ data2.latitude + '%2C' + data2.longitude, options)
-      .then(response => response.json())
-      .then(data => {
-        // Retrieve weather information from API response
-        //const location = data.current.location;
-        //const latitude = data.current.latitude;
-        console.log(data);
-        const temperature = data.current.temp_f;
-        const wind_direction = data.current.wind_dir;
-        const wind_speed = data.current.wind_kph;
-        const cloud_cover = data.current.cloud;
-        const humidity = data.current.humidity;
-
-        setWeatherInfo(temperature, wind_direction, wind_speed, cloud_cover, humidity);
-      })
-      .catch(error => console.log(error));
-  })
-  .catch(error => {
-    // Log any errors to the console
-    console.error(error);
-  });
-
-  function setWeatherInfo(temperature, wind_direction, wind_speed, cloud_cover, humidity,elementNumber) {
-    document.getElementById("temperature").innerHTML = `${temperature} &deg;F`;
-    document.getElementById("wind-speed").innerHTML = `Wind: ${wind_direction}, ${wind_speed} km/h`;
-    document.getElementById("cloud-cover").innerHTML = `Cloud Cover: ${cloud_cover}%`;
-    document.getElementById("humidity").innerHTML = `Humidity: ${humidity}%`;
-  }
-
-  function setLocationInfo(location, state){
-    document.getElementById("location").innerHTML = `${location}, ${state}`;
-  }*/
