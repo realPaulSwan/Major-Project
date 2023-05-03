@@ -83,20 +83,7 @@ document.addEventListener('click', function (event) {
     search();
   }
 });
-
-
-
-/*function searchLocation() {
-  var location = document.getElementById("search-bar").value;
-  alert("Searching for " + location);
-
-}*/
-
-
 /*API Calls*/
-
-
-
 
 function getLocationQuery(query, data) {
 
@@ -111,9 +98,6 @@ function getLocationQuery(query, data) {
   fetch('https://weather338.p.rapidapi.com/locations/search?query=' + query + '&language=en-US', options3)
     .then(response => response.json())
     .then(data3 => {
-      // Retrieve weather information from API response
-      //const location = data.current.location;
-      //const latitude = data.current.latitude;
       console.log("data3");
       console.log(data3);
       console.log("dataadresses");
@@ -168,8 +152,8 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
       console.log(WeatherData.maxTemp);
       console.log("WindDirection");
       console.log(WeatherData.WeatherPhrase);
-      console.log("WindPhrase");
-      console.log(WeatherData.WindPhrase);
+      console.log("UVRating");
+      console.log(WeatherData.UVRating);
       setWeatherContainer(WeatherData);
       setBackgroundfromTime(WeatherData.NightOrDay);
 
@@ -191,7 +175,7 @@ function getFullDateAsInt(date) {
 const carousel = document.querySelector('.weatherContainer');
 
 function setWeatherContainer(weatherDataInput) {
-  for (let i = 0; i < 4; i++) {
+  for (let i = 1; i < 5; i++) {
     //const data = weatherData;
     const container = document.createElement('div');
     container.classList.add('container');
@@ -205,11 +189,30 @@ function setWeatherContainer(weatherDataInput) {
     temperature.textContent = `${weatherDataInput.maxTemp[i]} &degF`;
     const windPhrase = document.createElement('p');
     windPhrase.textContent = `${weatherDataInput.WindPhrase[i]}`;
-    const WeatherPhrase = document.createElement('p');
-    WeatherPhrase.textContent = `Wind Speed: ${weatherDataInput.WeatherPhrase[i]}`;
+    const weatherPhrase = document.createElement('p');
+    weatherPhrase.textContent = `Wind Speed: ${weatherDataInput.WeatherPhrase[i]}`;
+    const myWeatherData = weatherDataInput.WeatherPhrase[i];
+    var IconImg = document.createElement("img");
+    if (myWeatherData.includes("rain")) {
+      IconImg.src = "RainIcon.png";
+      
+
+    } else if(myWeatherData.includes("cloud")){
+      IconImg.src = "CloudIcon.png";
+      
+    }
+    else {
+      IconImg.src = "SunIcon.jpg";
+    }
+    // Set the dimensions
+    IconImg.width = 100;
+    IconImg.height = 100;
+
+    // Set the object-fit property to contain
+    IconImg.style.objectFit = "contain";
     const UVRating = document.createElement('p');
     var uvHourlytoDailyNum = i + 10;
-    UVRating.textContent = `${weatherDataInput.UVRating[uvHourlytoDailyNum]}`;
+    UVRating.textContent = `UV Index: ${weatherDataInput.UVRating[uvHourlytoDailyNum]}`;
     //weather image selection
     const cloudCover = document.createElement('p');
     cloudCover.textContent = `Cloud Cover: ${weatherDataInput.CloudCover[i]}%`;
@@ -219,11 +222,14 @@ function setWeatherContainer(weatherDataInput) {
 
     // Append all the elements to the weather div
     //weatherDiv.appendChild(location);
+
+    weatherDiv.appendChild(IconImg);
     weatherDiv.appendChild(temperature);
     weatherDiv.appendChild(TimeDate);
     weatherDiv.appendChild(windPhrase);
     weatherDiv.appendChild(cloudCover);
-    weatherDiv.appendChild(humidity)
+    weatherDiv.appendChild(humidity);
+    weatherDiv.appendChild(UVRating);
 
     // Append the weather div to the container div
     container.appendChild(weatherDiv);
