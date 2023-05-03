@@ -1,6 +1,6 @@
 body {
-    margin: 0;
-    padding: 0;
+    /*margin: 0;
+    padding: 0;*/
     font-family: Arial, sans-serif;
     /*background-color: #f2f2f2;*/
     background-image: url("Pawl_mountains_material_design_blue_green_material_design_wallp_a49c9e00-67ef-44a5-8680-f1b45f35a933.png");
@@ -88,4 +88,26 @@ body {
   button:hover {
     background-color: #3e8e41;
   }
-    
+/* Search Results*/
+#search-results {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  width: 25%;
+  max-height: 200px;
+  overflow-y: auto;
+  top: 30px;
+}
+
+#search-results p {
+  padding: 5px;
+  cursor: pointer;
+}
+
+#search-results p:hover {
+  background-color: #ddd;
+}
+
+#searchSpacer{
+  height: 20px;
+}
