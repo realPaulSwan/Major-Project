@@ -129,6 +129,9 @@ body {
   background-color: #fff;
   text-align: center;
 }
+.weatherDiv {
+  align-items: center;
+}
 
 h1 {
   font-size: 32px;
