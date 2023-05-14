@@ -43,7 +43,7 @@ function getLocationAtRuntime() {
       const options = {
         method: 'GET',
         headers: {
-          'X-RapidAPI-Key': '25ba458d65msh704a5d78d43a769p1b283djsn6b6551de9b93',
+          'X-RapidAPI-Key': '',
           'X-RapidAPI-Host': 'find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com'
         }
       };
@@ -155,7 +155,7 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
   const options4 = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '8120e0dd5bmsh53b8a1ccf9804a5p1786cbjsn529820935ef4',
+      'X-RapidAPI-Key': '',
       'X-RapidAPI-Host': 'weather338.p.rapidapi.com'
     }
   };
