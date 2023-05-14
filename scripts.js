@@ -21,8 +21,6 @@ var WeatherData = {
 };
 const date = new Date();
 
-/* Run with local location*/
-
 
 /*Search*/
 
@@ -30,7 +28,7 @@ const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', search);
 const searchResults = document.getElementById('search-results');
 
-
+/* Run with local location*/
 getLocationAtRuntime();
 
 
@@ -71,7 +69,6 @@ function getLocationAtRuntime() {
 function search() {
   const input = searchInput.value.toLowerCase();
   getLocationQuery(input, myData);
-  //let matches = addresses.filter(address => address.toLowerCase().includes(input));
   let matches = myData.location.address;
   if (input === '') {
     matches = [];
@@ -121,14 +118,13 @@ document.addEventListener('click', function (event) {
     search();
   }
 });
-/*API Calls*/
 
 function getLocationQuery(query, data) {
 
   const options3 = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '25ba458d65msh704a5d78d43a769p1b283djsn6b6551de9b93',
+      'X-RapidAPI-Key': '8120e0dd5bmsh53b8a1ccf9804a5p1786cbjsn529820935ef4',
       'X-RapidAPI-Host': 'weather338.p.rapidapi.com'
     }
   };
@@ -159,7 +155,7 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
   const options4 = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '25ba458d65msh704a5d78d43a769p1b283djsn6b6551de9b93',
+      'X-RapidAPI-Key': '8120e0dd5bmsh53b8a1ccf9804a5p1786cbjsn529820935ef4',
       'X-RapidAPI-Host': 'weather338.p.rapidapi.com'
     }
   };
@@ -212,76 +208,10 @@ function getFullDateAsInt(date) {
 const carousel = document.querySelector('.weatherContainer');
 
 function setWeatherContainer(weatherDataInput) {
-
-
-  /*const carouselReset = document.querySelector('.weatherContainer');
-  carouselReset.innerHTML = '';*/
-
-  // const carousel = document.querySelector('.weatherContainer');
-
+  clearWeatherContainers();
   for (let i = 1; i < 5; i++) {
-    //const data = weatherData;
-    /*const container = document.createElement('div');
-    container.classList.add('container');
-    const weatherDiv = document.createElement('div');
-    weatherDiv.classList.add('weather');
-    
-    const TimeDate = document.createElement('p');
-    var formattedDate = formatReadableDate(weatherDataInput.currentTime)
-    TimeDate.textContent = `${weatherDataInput.currentTime}`;
-    const temperature = document.createElement('h1');
-    temperature.textContent = `${weatherDataInput.maxTemp[i]} °F`;
-    const windPhrase = document.createElement('p');
-    windPhrase.textContent = `${weatherDataInput.WindPhrase[i]}`;
-    const weatherPhrase = document.createElement('p');
-    weatherPhrase.textContent = `Wind Speed: ${weatherDataInput.WeatherPhrase[i]}`;
-    const myWeatherData = weatherDataInput.WeatherPhrase[i];
-    var IconImg = document.createElement("img");
-    if (myWeatherData.includes("rain")) {
-      IconImg.src = "RainIcon.png";
-      
 
-    } else if(myWeatherData.includes("cloud")){
-      IconImg.src = "CloudIcon.png";
-      
-    }
-    else {
-      IconImg.src = "SunIcon.jpg";
-    }
-    // Set the dimensions
-    IconImg.width = 100;
-    IconImg.height = 100;
-
-    // Set the object-fit property to contain
-    IconImg.style.objectFit = "contain";
-    const UVRating = document.createElement('p');
-    var uvHourlytoDailyNum = i + 10;
-    UVRating.textContent = `UV Index: ${weatherDataInput.UVRating[uvHourlytoDailyNum]}`;
-    //weather image selection
-    const cloudCover = document.createElement('p');
-    cloudCover.textContent = `Cloud Cover: ${weatherDataInput.CloudCover[i]}%`;
-    const humidity = document.createElement('p');
-    humidity.textContent = `Humidity: ${weatherDataInput.Humidity[i]}%`;
-    
-
-    // Append all the elements to the weather div
-    //weatherDiv.appendChild(location);
-
-    weatherDiv.appendChild(IconImg);
-    weatherDiv.appendChild(temperature);
-    weatherDiv.appendChild(TimeDate);
-    weatherDiv.appendChild(windPhrase);
-    weatherDiv.appendChild(cloudCover);
-    weatherDiv.appendChild(humidity);
-    weatherDiv.appendChild(UVRating);
-
-    // Append the weather div to the container div
-    container.appendChild(weatherDiv);
-
-    // Append the container div to the carousel
-    carousel.appendChild(container);*/
-
-
+ 
 
     // create container div
     const containerDiv = document.createElement("div");
@@ -310,7 +240,30 @@ function setWeatherContainer(weatherDataInput) {
 
     // create img element for weather image
     const imgElement = document.createElement("img");
-    imgElement.src = "cloudsunny.svg";
+    
+    
+    /*set icon based on weather*/
+    if (weatherDataInput.WeatherPhrase[i].includes("Rain")) {
+      imgElement.src = "clouddrizzle.svg";
+      
+
+    }else if(weatherDataInput.WeatherPhrase[i].includes("Cloud")){
+      //imgElement.src = "cloudsunny.svg";
+      imgElement.src = "cloud.svg";
+      
+    }else if(weatherDataInput.WeatherPhrase[i].includes("Snow")){
+      imgElement.src = "cloudsnow.svg";
+      
+    }
+    else if(weatherDataInput.NightOrDay != 'D'){
+      imgElement.src = "moon.svg";
+      
+    }
+    else {
+      imgElement.src = "sun1.svg";
+    }
+
+
     imgElement.alt = "Cloudy with sunshine";
 
     // append img element to icon container div
@@ -338,29 +291,11 @@ function setWeatherContainer(weatherDataInput) {
     // create p elements for wind speed, winds, cloud cover, humidity, and UV index
 
     const windsElement = document.createElement("p");
-    windsElement.textContent = `${weatherDataInput.WindPhrase[i]}`;
+    windsElement.textContent = `${weatherDataInput.WeatherPhrase[i]}, ${weatherDataInput.WindPhrase[i]}`;
 
-    const windSpeedElement = document.createElement("p");
-    windSpeedElement.textContent = `Wind Speed: ${weatherDataInput.WeatherPhrase[i]}`;
+    //const windSpeedElement = document.createElement("p");
+    //windSpeedElement.textContent = `Wind Speed: `;
 
-
-
-    /*const cloudCoverElement = document.createElement("p");
-    cloudCoverElement.textContent = "Cloud Cover: 41%";*/
-
-    /*// create p element for cloud cover
-    const cloudCoverElement = document.createElement("p");
-
-    // create span element for "Cloud Cover:" text
-    const cloudCoverText = document.createElement("span");
-    cloudCoverText.textContent = "Cloud Cover:";
-
-    // make "Cloud Cover:" text bold
-    cloudCoverText.style.fontWeight = "bold";
-
-    // append "Cloud Cover:" span element and percentage text to cloud cover p element
-    cloudCoverElement.appendChild(cloudCoverText);
-    cloudCoverElement.insertAdjacentText("beforeend", " 41%");*/
 
     /* Cloud Cover*/
     const cloudCoverElement = document.createElement("p");
@@ -374,12 +309,6 @@ function setWeatherContainer(weatherDataInput) {
     // append span element to cloud cover p element
     cloudCoverElement.appendChild(percentSpanElement);
 
-
-
-
-    /*const humidityElement = document.createElement("p");
-    humidityElement.textContent = "Humidity: 86%";*/
-
     /*Humidity*/
     const HumidityCoverElement = document.createElement("p");
     HumidityCoverElement.textContent = "Humidity: ";
@@ -391,9 +320,6 @@ function setWeatherContainer(weatherDataInput) {
 
     // append span element to cloud cover p element
     HumidityCoverElement.appendChild(HumiditypercentSpanElement);
-
-    /*const uvIndexElement = document.createElement("p");
-    uvIndexElement.textContent = "UV Index: 0";*/
 
     /*uv*/
     const uvCoverElement = document.createElement("p");
@@ -408,17 +334,12 @@ function setWeatherContainer(weatherDataInput) {
     // append span element to cloud cover p element
     uvCoverElement.appendChild(uvpercentSpanElement);
 
-
-
-
-
-
     // append p elements to weather info container div
     weatherInfoContainerDiv.appendChild(windsElement);
-    weatherInfoContainerDiv.appendChild(windSpeedElement);
+    //weatherInfoContainerDiv.appendChild(windSpeedElement);
     weatherInfoContainerDiv.appendChild(cloudCoverElement);
     weatherInfoContainerDiv.appendChild(HumidityCoverElement);
-    weatherInfoContainerDiv.appendChild(uvCoverElement);
+    //weatherInfoContainerDiv.appendChild(uvCoverElement);
 
     // append weather icon container div and weather info container div to cols div
     colsDiv.appendChild(weatherIconContainerDiv);
@@ -434,8 +355,6 @@ function setWeatherContainer(weatherDataInput) {
     // append container div to the body
     document.body.appendChild(containerDiv);
 
-
-    //slideIndex++;
     console.log("container")
     console.log(containerDiv);
   }
@@ -481,9 +400,14 @@ function formatReadableDate(dateString) {
   console.log(date);
   const options = { weekday: 'long', month: 'long', day: 'numeric' };
   const formattedDate = date.toLocaleDateString('en-US', options);
-  //return `${year}-${month}-${day} ${hours}:${minutes}`;
-  //return `${options.weekday}, ${options.month} ${options.day}`;
   console.log("formattedDate");
   console.log(formattedDate);
   return formattedDate;
+}
+
+function clearWeatherContainers() {
+  const containers = document.querySelectorAll('.container');
+  containers.forEach(container => {
+    container.remove();
+  });
 }
