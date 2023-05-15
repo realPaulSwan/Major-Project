@@ -21,9 +21,7 @@ var WeatherData = {
 };
 const date = new Date();
 
-
 /*Search*/
-
 const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', search);
 const searchResults = document.getElementById('search-results');
@@ -57,7 +55,6 @@ function getLocationAtRuntime() {
     });
 }
 
-
 function search() {
   const input = searchInput.value.toLowerCase();
   getLocationQuery(input, myData);
@@ -82,17 +79,9 @@ function showResults(matches) {
 }
 
 function SetPageWeatherAndLocation(matchData, longitude, latitude) {
-  console.log('Match data:', matchData);
   searchInput.value = matchData;
-  console.log('Match data:', longitude);
-  console.log('Match data:', latitude);
   getWeatherForcastQuery(latitude, longitude, WeatherData);
 }
-
-
-
-
-
 
 function hideResults() {
   searchResults.innerHTML = '';
@@ -116,7 +105,7 @@ function getLocationQuery(query, data) {
   const options3 = {
     method: 'GET',
     headers: {
-      'X-RapidAPI-Key': '8120e0dd5bmsh53b8a1ccf9804a5p1786cbjsn529820935ef4',
+      'X-RapidAPI-Key': '',
       'X-RapidAPI-Host': 'weather338.p.rapidapi.com'
     }
   };
@@ -124,11 +113,6 @@ function getLocationQuery(query, data) {
   fetch('https://weather338.p.rapidapi.com/locations/search?query=' + query + '&language=en-US', options3)
     .then(response => response.json())
     .then(data3 => {
-      console.log("data3");
-      console.log(data3);
-      console.log("dataadresses");
-      console.log(data3.location.address);
-
       data.location.address = data3.location.address;
       data.location.latitude = data3.location.latitude;
       data.location.longitude = data3.location.longitude;
@@ -137,13 +121,8 @@ function getLocationQuery(query, data) {
 
 }
 
-
-
 function getWeatherForcastQuery(latitude, longitude, WeatherData) {
-
-
   const localDate = getFullDateAsInt(date);
-
   const options4 = {
     method: 'GET',
     headers: {
@@ -155,13 +134,6 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
   fetch('https://weather338.p.rapidapi.com/weather/forecast?date=' + localDate + '&latitude=' + latitude + '&longitude=' + longitude + '&language=en-US&units=m', options4)
     .then(response => response.json())
     .then(data3 => {
-
-      console.log("OutputtedForcastData");
-      console.log(data3);
-
-      //WeatherData = data3;
-
-      console.log("OutputtedForcastData2");
       WeatherData.maxTemp = data3["v3-wx-forecast-daily-15day"]["calendarDayTemperatureMax"];
       WeatherData.WindPhrase = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["windPhrase"];
       WeatherData.WeatherPhrase = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["wxPhraseLong"];
@@ -171,21 +143,10 @@ function getWeatherForcastQuery(latitude, longitude, WeatherData) {
       WeatherData.daypartName = data3["v3-wx-forecast-daily-15day"]["daypart"][0]["daypartName"];
       WeatherData.NightOrDay = data3["v3-wx-observations-current"]["dayOrNight"];
       WeatherData.currentTime = data3["v3-wx-forecast-daily-15day"]["validTimeLocal"];
-
-
-
-      console.log("Maxtemp");
-      console.log(WeatherData.maxTemp);
-      console.log("WindDirection");
-      console.log(WeatherData.WeatherPhrase);
-      console.log("currentTime");
-      console.log(WeatherData.currentTime);
       setWeatherContainer(WeatherData);
       setBackgroundfromTime(WeatherData.NightOrDay);
-
     })
     .catch(error => console.log(error));
-
 }
 
 
@@ -239,7 +200,7 @@ function setWeatherContainer(weatherDataInput) {
       imgElement.src = "cloud.svg";
       
     }else if(weatherDataInput.WeatherPhrase[i].includes("Snow")){
-      imgElement.src = "cloudsnow.svg";
+      imgElement.src = "cloudsnow.png";
       
     }
     else if(weatherDataInput.NightOrDay != 'D'){
@@ -304,8 +265,6 @@ function setWeatherContainer(weatherDataInput) {
     // append span element to cloud cover p element
     HumidityCoverElement.appendChild(HumiditypercentSpanElement);
 
-
-
     // append p elements to weather info container div
     weatherInfoContainerDiv.appendChild(windsElement);
     //weatherInfoContainerDiv.appendChild(windSpeedElement);
@@ -333,32 +292,20 @@ function setWeatherContainer(weatherDataInput) {
 }
 
 /* Add effects for night and day background*/
-
 const body = document.querySelector('body');
 
 function setBackgroundfromTime(NightOrDay) {
-
-
   if (NightOrDay == 'D') {
     body.style.backgroundImage = 'url("Pawl_mountains_material_design_blue_green_material_design_wallp_a49c9e00-67ef-44a5-8680-f1b45f35a933.png")';
   } else {
     body.style.backgroundImage = 'url("Pawl_night_mountains_material_design_blue_green_material_design_95fb5cca-cd46-4e1a-b789-940562efe2c9.png")';
   }
-
-
 }
 
 function formatReadableDate(dateString) {
-
-  console.log("dateString");
-  console.log(dateString);
   const date = new Date(dateString);
-  console.log("date");
-  console.log(date);
   const options = { weekday: 'long', month: 'long', day: 'numeric' };
   const formattedDate = date.toLocaleDateString('en-US', options);
-  console.log("formattedDate");
-  console.log(formattedDate);
   return formattedDate;
 }
 
@@ -367,4 +314,31 @@ function clearWeatherContainers() {
   containers.forEach(container => {
     container.remove();
   });
+}
+
+/*test cases*/
+
+function testformatReadableDate(date,formattedDate){
+  console.log("date");
+  console.log(date);
+  console.log("formattedDate");
+  console.log(formattedDate);
+}
+
+function testgetWeatherData(WeatherData,data3){
+  console.log("OutputtedForcastData");
+  console.log(data3);
+  console.log("Maxtemp");
+  console.log(WeatherData.maxTemp);
+  console.log("WindDirection");
+  console.log(WeatherData.WeatherPhrase);
+  console.log("currentTime");
+  console.log(WeatherData.currentTime);
+}
+
+function testLocationData(data3){
+  console.log("data3");
+  console.log(data3);
+  console.log("dataadresses");
+  console.log(data3.location.address);
 }
