@@ -51,18 +51,10 @@ function getLocationAtRuntime() {
       fetch('https://find-any-ip-address-or-domain-location-world-wide.p.rapidapi.com/iplocation?ip=' + data.ip + '&apikey=873dbe322aea47f89dcf729dcc8f60e8', options)
         .then(response => response.json())
         .then(data2 => {
-
           console.log(data2);
-
           getWeatherForcastQuery(data2.latitude, data2.longitude, WeatherData);
-
-
         });
-
     });
-
-
-
 }
 
 
@@ -204,14 +196,9 @@ function getFullDateAsInt(date) {
   return parseInt(`${year}${month < 10 ? '0' : ''}${month}${day < 10 ? '0' : ''}${day}`);
 }
 
-/*carousel*/
-const carousel = document.querySelector('.weatherContainer');
-
 function setWeatherContainer(weatherDataInput) {
   clearWeatherContainers();
   for (let i = 1; i < 5; i++) {
-
- 
 
     // create container div
     const containerDiv = document.createElement("div");
@@ -293,10 +280,6 @@ function setWeatherContainer(weatherDataInput) {
     const windsElement = document.createElement("p");
     windsElement.textContent = `${weatherDataInput.WeatherPhrase[i]}, ${weatherDataInput.WindPhrase[i]}`;
 
-    //const windSpeedElement = document.createElement("p");
-    //windSpeedElement.textContent = `Wind Speed: `;
-
-
     /* Cloud Cover*/
     const cloudCoverElement = document.createElement("p");
     cloudCoverElement.textContent = "Cloud Cover: ";
@@ -321,25 +304,13 @@ function setWeatherContainer(weatherDataInput) {
     // append span element to cloud cover p element
     HumidityCoverElement.appendChild(HumiditypercentSpanElement);
 
-    /*uv*/
-    const uvCoverElement = document.createElement("p");
-    uvCoverElement.textContent = "UV Index: ";
 
-    // create span element for percentage
-    const uvpercentSpanElement = document.createElement("span");
-    var uvHourlytoDailyNum = i + 10;
-    uvpercentSpanElement.textContent = ` ${weatherDataInput.UVRating[uvHourlytoDailyNum]}`;
-    uvpercentSpanElement.style.fontWeight = "bold";
-
-    // append span element to cloud cover p element
-    uvCoverElement.appendChild(uvpercentSpanElement);
 
     // append p elements to weather info container div
     weatherInfoContainerDiv.appendChild(windsElement);
     //weatherInfoContainerDiv.appendChild(windSpeedElement);
     weatherInfoContainerDiv.appendChild(cloudCoverElement);
     weatherInfoContainerDiv.appendChild(HumidityCoverElement);
-    //weatherInfoContainerDiv.appendChild(uvCoverElement);
 
     // append weather icon container div and weather info container div to cols div
     colsDiv.appendChild(weatherIconContainerDiv);
@@ -360,8 +331,6 @@ function setWeatherContainer(weatherDataInput) {
   }
 
 }
-// Initialize the carousel using jQuery
-
 
 /* Add effects for night and day background*/
 
@@ -377,18 +346,6 @@ function setBackgroundfromTime(NightOrDay) {
   }
 
 
-}
-
-
-function convertUTCDateToLocalDate(date) {
-  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-
-  var offset = date.getTimezoneOffset() / 60;
-  var hours = date.getHours();
-
-  newDate.setHours(hours - offset);
-
-  return newDate;
 }
 
 function formatReadableDate(dateString) {
